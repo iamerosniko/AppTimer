@@ -46,23 +46,17 @@ namespace AppTimer
             var timeofEnd = myDate.Value.ToString("hh:mm tt");
             a = Convert.ToDateTime(timeofStart);
             DateTime b = Convert.ToDateTime(timeofEnd);
-            var x = b.Subtract(a).TotalSeconds;
+            var x = b.Subtract(a).TotalSeconds < 0 ? b.AddDays(1).Subtract(a).TotalSeconds : b.Subtract(a).TotalSeconds;
             labelRemaining.Text = x.ToString() + " Seconds";
-            if (x < 0)
+
+            if (DateTime.Now.ToShortTimeString().Equals(myDate.Value.ToShortTimeString()))
             {
-                timer.Stop();
-                labelRemaining.Text = "Timer has stopped.";
-            }
-            else
-            {
-                if (DateTime.Now.ToShortTimeString().Equals(myDate.Value.ToShortTimeString()))
-                {
-                    var psi = new ProcessStartInfo("shutdown", "/s /t 0");
-                    psi.CreateNoWindow = true;
-                    psi.UseShellExecute = false;
-                    Process.Start(psi);
-                }
+                var psi = new ProcessStartInfo("shutdown", "/s /t 0");
+                psi.CreateNoWindow = true;
+                psi.UseShellExecute = false;
+                Process.Start(psi);
             }
         }
+
     }
 }
